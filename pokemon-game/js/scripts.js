@@ -22,15 +22,20 @@ $(document).ready(function(){
            return a.url;
          });
          for (var i=0;i<nameArray.length;i++){
-           $("#pokemon").append("<li value = '" + (i+1) +"'>" + nameArray[i] + "</li>");
+           $("#pokemon").append("<div class='pokeImage' id='" + nameArray[i] + "'>" + nameArray[i] + "</div>");
          }
 
-         $('li').click(function(){
-           identifier = $(this).val();
+         $('.pokeImage').click(function(){
+           identifier = $(this).text();
            settingsApi.url = ("http://www.pokeapi.co/api/v2/pokemon/" + identifier + "/")
            $.ajax(settingsApi).done(function(dataReturned){
-             var image = dataReturned.sprites.front_default;
-               $("#pokeImage").append("<img src='" + image + "'>");
+             result = dataReturned;
+             var image = result.sprites.front_default;
+               $("#" + identifier).append("<img src='" + image + "'>");
+               for (i=0;i<=3;i++){
+                 $("#" + identifier).append("<li>" + result.stats[i].stat.name + ": " + result.stats[i].base_stat + "</li>");
+               }
+               $("#" + identifier).slideDown();
            });
          });
        });
